@@ -1,12 +1,15 @@
 package com.zhtian;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
  * Created by Skye on 2017/6/24.
  */
+
+@Entity
 public class User {
 
     @Id
