@@ -1,4 +1,3 @@
-target/
 !*.jar
 
 ### STS ###
@@ -23,3 +22,4 @@ dist/
 nbdist/
 .nb-gradle/
 src/test/
+target/
