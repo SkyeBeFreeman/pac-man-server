@@ -1,3 +1,3 @@
 # pac-man-server
 
-cocos-2dx + C++
+Supported by Cocos-2dx and C++
