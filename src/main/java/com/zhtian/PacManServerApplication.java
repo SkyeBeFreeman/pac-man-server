@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,12 +41,7 @@ public class PacManServerApplication {
 	}
 
     @PostMapping(value = "/login")
-    public ResponseEntity<?> login(HttpSession session, String username, String password) {
-        if (session.isNew()) {
-            logger.info("Successfully creates a session ，the id of session ：" + session.getId());
-        } else {
-            logger.info("session already exists in the server, the id of session ："+ session.getId());
-        }
+    public ResponseEntity<?> login(String username, String password) {
         int cnt = userRepository.countByUsername(username);
         if (cnt <= 0) {
             return new ResponseEntity<>("用户名不存在", HttpStatus.NOT_FOUND);
@@ -54,17 +50,14 @@ public class PacManServerApplication {
         if (!temp.equals(password)) {
             return new ResponseEntity<>("密码错误", HttpStatus.NOT_FOUND);
         }
-        session.setAttribute("username", username);
         return new ResponseEntity<>("登陆成功", HttpStatus.OK);
     }
 
-    @GetMapping(value = "/rank")
-    public ResponseEntity<?> rank(HttpSession session) {
-        logger.info(session.getId());
+    @GetMapping(value = "/rank/{username}")
+    public ResponseEntity<?> rank(@PathVariable String username) {
         List<User> userList = userRepository.findFirst10ByOrderByMaxscoreDesc();
         StringBuilder result = new StringBuilder("|");
         userList.stream().map(i -> result.append(i.getUsername() + ":" + i.getMaxscore() + "|"));
-        String username = (String) session.getAttribute("username");
         User temp = userRepository.findByUsername(username);
         int ranking = userRepository.countRanking(temp.getMaxscore());
         return new ResponseEntity<>(new RankForm(username, temp.getMaxscore(), ranking, new String(result)), HttpStatus.OK);

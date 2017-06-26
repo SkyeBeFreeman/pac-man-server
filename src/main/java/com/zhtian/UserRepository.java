@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     int countByUsername(String username);
 
-    @Query(value = "select count(*)+1 from User u where u.maxscore > ?1", nativeQuery = true)
+    @Query(value = "select count(*)+1 from user u where u.maxscore > ?1", nativeQuery = true)
     int countRanking(int maxscore);
 
     User findByUsername(String username);
