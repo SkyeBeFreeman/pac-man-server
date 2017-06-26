@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @SpringBootApplication
 @RestController
+@Transactional
 public class PacManServerApplication {
 
     @Autowired
@@ -64,6 +66,12 @@ public class PacManServerApplication {
         User temp = userRepository.findByUsername(username);
         int ranking = userRepository.countRanking(temp.getMaxscore());
         return new ResponseEntity<>(new RankForm(username, temp.getMaxscore(), ranking, new String(result)), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/submit")
+    public ResponseEntity<?> submit(String username, String score) {
+        userRepository.updateMaxScore(Integer.parseInt(score), username);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
