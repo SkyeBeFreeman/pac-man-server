@@ -57,7 +57,10 @@ public class PacManServerApplication {
     public ResponseEntity<?> rank(@PathVariable String username) {
         List<User> userList = userRepository.findFirst10ByOrderByMaxscoreDesc();
         StringBuilder result = new StringBuilder("|");
-        userList.stream().map(i -> result.append(i.getUsername() + ":" + i.getMaxscore() + "|"));
+        int cnt = 1;
+        for (User i : userList) {
+            result.append("玩家" + i.getUsername() + "的分数是" + i.getMaxscore() + "，排名是世界第" + (cnt++) + "|");
+        }
         User temp = userRepository.findByUsername(username);
         int ranking = userRepository.countRanking(temp.getMaxscore());
         return new ResponseEntity<>(new RankForm(username, temp.getMaxscore(), ranking, new String(result)), HttpStatus.OK);
