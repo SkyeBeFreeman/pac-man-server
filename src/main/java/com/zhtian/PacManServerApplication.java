@@ -50,7 +50,7 @@ public class PacManServerApplication {
         if (!temp.equals(password)) {
             return new ResponseEntity<>("密码错误", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("登陆成功", HttpStatus.OK);
+        return new ResponseEntity<>(userRepository.findByUsername(username).getMaxscore() + "", HttpStatus.OK);
     }
 
     @GetMapping(value = "/rank/{username}")
@@ -59,7 +59,7 @@ public class PacManServerApplication {
         StringBuilder result = new StringBuilder("|");
         int cnt = 1;
         for (User i : userList) {
-            result.append("玩家" + i.getUsername() + "的分数是" + i.getMaxscore() + "，排名是世界第" + (cnt++) + "|");
+            result.append("玩家" + i.getUsername() + "的分数是" + i.getMaxscore() + "，世界排名是第" + (cnt++) + "位|");
         }
         User temp = userRepository.findByUsername(username);
         int ranking = userRepository.countRanking(temp.getMaxscore());
