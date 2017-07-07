@@ -1,3 +1,3 @@
 # pac-man-server
 
-Supported by Cocos-2dx and C++
+Supported by Spring-Boot
